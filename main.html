@@ -1,58 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sender Platform – Landing Page</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sender — Browse Jobs</title>
+
+  <!-- (Optional) Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    crossorigin="anonymous"
+  />
+
+  <!-- Your CSS -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Top Navigation -->
+  <!-- Navbar shared style -->
   <header class="navbar">
     <h1 class="logo">Sender</h1>
     <nav>
-      <a href="main.html">Home</a>
-      <a href="applications.html">Applications</a>
+      <a href="index.html">Home</a>
+      <a href="applications.html" aria-current="page">Applications</a>
       <a href="profile.html">Profile</a>
     </nav>
   </header>
 
   <!-- Fullscreen map background -->
-  <section class="map-section">
-    <img src="assets/map-placeholder.jpg" alt="Map background">
-    
-    <!-- Transparent overlay content -->
+  <section class="map-section" aria-label="Map background">
+    <img src="assets/map-placeholder.jpg" alt="Map background" />
+    <!-- Overlay content -->
     <div class="overlay">
-      <div class="job-card">
-        <h2>Website Designer</h2>
-        <p><strong>Location:</strong> Lubbock, TX</p>
-        <p><strong>Work Type:</strong> Part-time</p>
-        <p><strong>Pay:</strong> $95k–100k / year</p>
-        <p><strong>Description:</strong> Design and maintain user interfaces for client platforms.</p>
-        <button>Apply Now</button>
-      </div>
+      <!-- Left: main job -->
+      <article class="card glass" aria-labelledby="job-title">
+        <h2 id="job-title" class="card-title">Website Designer</h2>
+        <p class="card-row"><strong>Location:</strong> Lubbock, TX</p>
+        <p class="card-row"><strong>Work Type:</strong> Part-time</p>
+        <p class="card-row"><strong>Pay:</strong> $95k–100k / year</p>
+        <p class="card-row"><strong>Description:</strong> Design and maintain user interfaces for client platforms.</p>
+        <button class="btn">Apply Now</button>
+      </article>
 
-      <div class="job-list">
-        <h3>Other Openings</h3>
-        <div class="job-item">
-          <p><strong>Software Developer</strong></p>
-          <p>Lubbock, TX – $85k / year</p>
-        </div>
-        <div class="job-item">
-          <p><strong>Marketing Analyst</strong></p>
-          <p>Austin, TX – $72k / year</p>
-        </div>
-        <div class="job-item">
-          <p><strong>Graphic Designer</strong></p>
-          <p>Remote – $60k / year</p>
-        </div>
-      </div>
+      <!-- Right: other openings -->
+      <aside class="card glass list-card" aria-labelledby="openings-title">
+        <h3 id="openings-title" class="card-title">Other Openings</h3>
+
+        <a class="job-item" href="#">
+          <div>
+            <p class="job-title">Software Developer</p>
+            <p class="job-meta">Lubbock, TX — $85k / year</p>
+          </div>
+          <span class="job-arrow">→</span>
+        </a>
+
+        <a class="job-item" href="#">
+          <div>
+            <p class="job-title">Marketing Analyst</p>
+            <p class="job-meta">Austin, TX — $72k / year</p>
+          </div>
+          <span class="job-arrow">→</span>
+        </a>
+
+        <a class="job-item" href="#">
+          <div>
+            <p class="job-title">Graphic Designer</p>
+            <p class="job-meta">Remote — $60k / year</p>
+          </div>
+          <span class="job-arrow">→</span>
+        </a>
+      </aside>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer>
-    <p>© 2025 Sender Project – All rights reserved.</p>
+  <footer class="footer">
+    <p>© 2025 Sender Project — All rights reserved.</p>
   </footer>
+
+  <!-- (Optional) Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,39 +1,72 @@
-/* ===== Login (index.html) ===== */
-.login-hero{
-  position: relative;
+/* ========== BASIC RESET ==========
+   Keep it simple and predictable
+==================================*/
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #222;
+}
+
+/* ========== NAVBAR (shared) ========== */
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  z-index: 10;
+}
+.logo {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #333;
+}
+.navbar nav a {
+  color: #333;
+  text-decoration: none;
+  margin-left: 18px;
+  font-weight: 600;
+}
+.navbar nav a:hover { color: #4a6cf7; }
+
+/* Spacing helper for content below fixed navbar */
+main, section { scroll-margin-top: 70px; }
+
+/* ========== LOGIN PAGE (index.html) ========== */
+.login-hero {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding-top: 70px; /* space for navbar */
-  /* same vibe as your design: pink → purple gradient */
-  background: radial-gradient(1200px 600px at 0% 0%, #ff4b91 0%, transparent 60%),
-              radial-gradient(1200px 600px at 100% 0%, #8a2be2 0%, transparent 60%),
-              linear-gradient(135deg, #ff2d6b 0%, #8a1ea8 45%, #3b167a 100%);
-}
-
-.login-box{
-  text-align: center;
+  padding-top: 60px; /* room for navbar */
+  background:
+    radial-gradient(1200px 600px at 0% 0%, #ff4b91 0%, transparent 60%),
+    radial-gradient(1200px 600px at 100% 0%, #8a2be2 0%, transparent 60%),
+    linear-gradient(135deg, #ff2d6b 0%, #8a1ea8 45%, #3b167a 100%);
   color: #fff;
-  padding: 40px 28px;
 }
-
-.login-title{
-  font-size: clamp(3rem, 10vw, 6rem);
-  letter-spacing: .12em;
-  margin-bottom: 10px;
-  font-weight: 800;
+.login-box { text-align: center; padding: 24px; }
+.login-title {
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  letter-spacing: .12em; font-weight: 800; margin: 0 0 8px;
 }
-
-.login-tag{
+.login-tag {
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
-  font-size: clamp(1rem, 1.5vw, 1.3rem);
-  letter-spacing: .12em;
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  letter-spacing: .1em;
   opacity: .95;
-  margin-bottom: 26px;
+  margin: 0 0 20px;
 }
+.login-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
 /* Buttons (shared) */
-.btn{
+.btn {
   display: inline-block;
   padding: 10px 22px;
   border-radius: 999px;
@@ -41,21 +74,92 @@
   color: #fff;
   text-decoration: none;
   font-weight: 700;
-  margin: 8px 10px 0 10px;
   border: 1px solid rgba(255,255,255,0.6);
   box-shadow: 0 4px 10px rgba(0,0,0,.15);
   transition: transform .15s ease, filter .2s ease;
 }
-.btn:hover{ transform: translateY(-2px); filter: brightness(1.05); }
+.btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+.btn-ghost { background: #fff; color: #111; }
 
-.btn-ghost{
-  background: #fff;
-  color: #111;
+/* ========== LANDING PAGE (main.html) ========== */
+/* Fullscreen map background */
+.map-section {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* full screen */
+  overflow: hidden;
+  padding-top: 60px; /* space for navbar */
+}
+.map-section img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(75%);
 }
 
-/* Keep footer readable on gradient */
-footer{
-  background: rgba(245,245,245,.9);
-  position: relative;
-  z-index: 1;
+/* Overlay cards on top of the map */
+.overlay {
+  position: absolute;
+  inset: 70px 20px 20px 20px; /* keep off the edges & below navbar */
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  z-index: 2;
+}
+
+/* Glass cards */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+.glass {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.6);
+}
+.card-title {
+  margin: 0 0 10px;
+  font-size: 1.25rem; font-weight: 800; color: #222;
+}
+.card-row { margin: 6px 0; color: #444; }
+
+/* Main job card (left) */
+.card { width: 320px; }
+
+/* Other openings (right) */
+.list-card { width: 300px; max-height: 440px; overflow-y: auto; }
+.job-item {
+  display: grid; grid-template-columns: 1fr auto; align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #eee;
+  text-decoration: none; color: inherit;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.job-item:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.12); }
+.job-title { margin: 0; font-weight: 700; }
+.job-meta { margin: 2px 0 0; color: #666; font-size: .95rem; }
+.job-arrow { font-weight: 800; }
+
+/* Footer */
+.footer {
+  background: #f5f5f5;
+  text-align: center;
+  padding: 14px 10px;
+  color: #555;
+}
+
+/* ========== RESPONSIVE TWEAKS ========== */
+@media (max-width: 980px) {
+  .overlay { justify-content: center; }
+  .card, .list-card { width: min(420px, 100%); }
 }
