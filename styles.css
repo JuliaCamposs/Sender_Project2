@@ -18,7 +18,7 @@ body {
   --g3: #EB5B21
 }
 
-/* ===== top bar (renamed to avoid any .navbar collisions) ===== */
+/* ===== top bar ===== */
 .topbar{
   position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
   display: flex; align-items: center; justify-content: space-between;
@@ -85,7 +85,7 @@ body {
   object-fit: cover; filter: brightness(75%);
 }
 
-/* ===== overlay grid (3 columns: left card • spacer • right card) ===== */
+/* ===== overlay grid  ===== */
 .overlay{
   position: absolute;
   left: var(--edge); right: var(--edge); bottom: var(--edge);
@@ -115,12 +115,12 @@ body {
 
 /* Tall cards that leave a map window visible */
 .tall{
-  height: 85vh;                  /* <- adjust to 80–90vh if you want more/less map */
+  height: 85vh;                 
   display: flex; flex-direction: column; justify-content: space-between;
 }
 .list-card{ overflow: auto; }
 
-/* job list items */
+
 /* === Job list items (soft gradient background) === */
 .job-item {
   display: grid;
