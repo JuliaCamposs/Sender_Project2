@@ -1,69 +1,38 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sender — Login</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+  <!-- Simple fixed navbar (optional) -->
   <header class="navbar">
-  <div class="container navbar__inner">
-    <div class="navbar__icons">
-      <a class="ribbon" href="applications.html" title="Submitted Applications">
-        <svg class="icon" aria-hidden="true"><use href="assets/icon-doc.png"/></svg>
-      </a>
-      <a class="ribbon" href="main.html" title="Sender Home">
-        <svg class="icon" aria-hidden="true"><use href="assets/icon-ribbon.png"/></svg>
-      </a>
-    </div>
-    <a class="brand" href="main.html">
-      <div class="brand__mark">S</div>
-      <span class="brand__text">Sender</span>
-    </a>
-    <div class="navbar__actions">
-      <a class="icon-btn" href="profile.html" title="Profile">
-        <svg class="icon" aria-hidden="true"><use href="assets/icon-user.png"/></svg>
-      </a>
-    </div>
-  </div>
-</header>
-  <svg aria-hidden="true" style="position:absolute; width:0; height:0;">
-    <!-- sprite link fallback -->
-  </svg>
-  <div class="page hero container">
-    <div>
-      <h1 class="hero__title">SENDER</h1>
-      <p class="hero__tag">Find Your Dream Job One Swipe At a Time</p>
-      <div class="cta-stack">
-        <a class="button button--ghost" href="main.html">Log In</a>
-        <a class="button" href="main.html">Sign Up</a>
+    <h1 class="logo">Sender</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="main.html">Explore Jobs</a>
+      <a href="profile.html">Profile</a>
+    </nav>
+  </header>
+
+  <!-- Fullscreen gradient hero for login -->
+  <section class="login-hero">
+    <div class="login-box">
+      <h1 class="login-title">SENDER</h1>
+      <p class="login-tag">Find Your Dream Job One Swipe At a Time</p>
+
+      <div class="login-actions">
+        <a class="btn btn-ghost" href="main.html">Log In</a>
+        <a class="btn" href="main.html">Sign Up</a>
       </div>
     </div>
-  </div>
-  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
-  <symbol id="icon-doc" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M6 2h7l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm7 1v5h5"/>
-  </symbol>
-  <symbol id="icon-ribbon" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M6 2h12v18l-6-3-6 3V2z"/>
-  </symbol>
-  <symbol id="icon-user" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-5 0-9 2.5-9 5v1h18v-1c0-2.5-4-5-9-5z"/>
-  </symbol>
-  <symbol id="icon-arrow" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M13 5l7 7-7 7v-4H4v-6h9z"/>
-  </symbol>
-  <symbol id="icon-location" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 14.5 9 2.5 2.5 0 0 1 12 11.5z"/>
-  </symbol>
-  <symbol id="icon-menu" viewBox="0 0 24 24">
-    <path fill="currentColor" d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/>
-  </symbol>
-</svg>
+  </section>
 
+  <footer>
+    <p>© 2025 Sender Project – All rights reserved.</p>
+  </footer>
 </body>
 </html>
