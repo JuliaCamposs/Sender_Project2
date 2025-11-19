@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Microsoft Job Portal</title>
+<style>
+  /* Navbar styles */
+  .top-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    background: #ffffff; /* white navbar */
+    color: #000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-family: Georgia, serif;
+  }
+
+  .top-nav .nav-left {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #000;
+  }
+
+  .top-nav .nav-right a {
+    color: #000;
+    text-decoration: none;
+    margin-left: 25px;
+    font-size: 1rem;
+    transition: color 0.2s;
+  }
+
+  .top-nav .nav-right a:hover {
+    color: #d61f6e; /* hover accent color */
+  }
+
+  /* Push content below navbar */
+  body {
+    padding-top: 60px;
+    margin: 0;
+    font-family: Georgia, serif;
+    background: linear-gradient(120deg, #d61f6e, #6a1bb3);
+    color: #000;
+  }
+
+  .container {
+    width: 90%;
+    margin: 30px auto;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+  }
+
+  h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .job-listings a {
+    display: block;
+    font-size: 20px;
+    margin: 6px 0;
+    color: black;
+    text-decoration: underline;
+  }
+
+  .applications ol {
+    font-size: 18px;
+    line-height: 1.7;
+  }
+
+  .sidebar {
+    position: absolute;
+    top: 60px;
+    right: 40px;
+    width: 220px;
+    background: rgba(255,255,255,0.85);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: left;
+    font-size: 15px;
+  }
+
+  .sidebar img {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .button {
+    margin-top: 25px;
+    padding: 12px 22px;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #b592ff, #ff7777);
+    border: none;
+    font-size: 16px;
+  }
+</style>
+</head>
+
+<body style="min-height:100vh;">
+
+  <!-- Top Navigation Bar -->
+  <nav class="top-nav">
+    <div class="nav-left">Company Portal</div>
+    <div class="nav-right">
+      <a href="index.html">Main</a>
+      <a href="applications2.html">Applications</a>
+      <a href="profile.html">Profile</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Microsoft</h1>
+    <div class="grid">
+      <div class="job-listings">
+        <h2>Current Job Listings</h2>
+        <a>Software Engineer</a>
+        <a>Data Scientist</a>
+        <a>Cloud Solutions Architect</a>
+        <a>Cybersecurity Analyst</a>
+        <a>Product Manager</a>
+        <a>AI Researcher</a>
+        <a>UX/UI Designer</a>
+        <a>DevOps Engineer</a>
+        <a>Technical Program Manager</a>
+        <a>Support Engineer</a>
+        <button class="button" id="add-listing-btn">Add New Listing +</button>
+      </div>
+
+      <div class="applications">
+        <h2>Outgoing Applications</h2>
+        <ol>
+          <li>Alex Turner — Software Engineer — 14:32</li>
+          <li>Maya Chen — Data Scientist — 09:11</li>
+          <li>Jordan Price — Cloud Solutions Architect — 22:48</li>
+          <li>Riley Gomez — Cybersecurity Analyst — 03:57</li>
+          <li>Taylor Brooks — Product Manager — 17:20</li>
+          <li>Sam Rivera — AI Researcher — 11:05</li>
+          <li>Casey Morgan — UX/UI Designer — 08:44</li>
+          <li>Devon Lee — DevOps Engineer — 19:56</li>
+          <li>Jamie Patel — Technical Program Manager — 01:29</li>
+          <li>Avery Scott — Support Engineer — 12:13</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar" style="background:white;">
+    <img src="img/microsoft.png" />
+    <a>Edit Profile</a><br /><br />
+    <strong>Company Email:</strong><br />Microsoft@bing.com<br /><br />
+    <strong>Address:</strong><br />One Microsoft Way,<br />Redmond, WA<br />98052-6399<br /><br />
+    <a>Edit Profile</a>
+  </div>
+
+  <script>
+    function addListing() {
+      const title = prompt("Enter new job title:");
+      if (!title) return;
+      const listingsDiv = document.querySelector('.job-listings');
+      const button = document.getElementById('add-listing-btn');
+      const link = document.createElement('a');
+      link.href = '#';
+      link.textContent = title;
+      listingsDiv.insertBefore(link, button);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('add-listing-btn').addEventListener('click', addListing);
+    });
+  </script>
+  
+</body>
+</html>
