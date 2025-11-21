@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <title>Jobs Map — Interactive</title>
+
+
+    <style>
+
+      .top-nav {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 18px;
+        background: rgba(255,255,255,0.95);
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        font-family: "Courier New", monospace;
+        position: relative;
+        z-index: 1002;
+      }
+      .top-nav .nav-left { font-weight: 700; letter-spacing: 2px; }
+      .top-nav .nav-right a { margin-left: 12px; text-decoration: none; color: #222; }
+
+
+      :root{
+        --accent1: rgba(255,89,146,0.12);
+        --accent2: rgba(130,70,255,0.12);
+        --pill-bg: hsl(0, 0%, 100%);
+        --glass: rgba(255,255,255,0.6);
+      }
+      html,body{height:100%;margin:0;font-family: Inter, "Courier New", monospace;}
+      body{background:linear-gradient(
+      90deg,
+      rgba(255, 0, 0, 1) 0%,
+      rgb(255, 0, 170) 100%
+    );overflow:hidden;}
+
+
+      .page {
+        position: absolute;
+        inset: 60px 0 0 0; 
+        display: grid;
+        grid-template-columns: 380px 1fr 380px; 
+        gap: 18px;
+        padding: 18px;
+        align-items: start;
+      }
+
+      /* --- Interactive map --- */
+      #map {
+        position: relative;
+        width: 100%;
+        height: calc(100vh - 60px - 36px);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        z-index: 1;
+        background: url("img/map-placeholder.png") center/cover no-repeat;
+        cursor: pointer;
+      }
+
+
+      /* --- Top filter/search bar --- */
+      .filter-bar {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        top: 80px;
+        z-index: 1001;
+        display:flex;
+        gap:10px;
+        background: linear-gradient(90deg,#fff 0%, #fff);
+        padding:10px 18px;
+        border-radius:28px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+        align-items:center;
+        width: 60%;
+        min-width: 560px;
+        font-family: "Courier New", monospace;
+      }
+      .filter-bar input, .filter-bar select {
+        border: none;
+        padding: 8px 10px;
+        border-radius: 12px;
+        outline: none;
+        background: #fafafa;
+        min-width: 110px;
+        font-family: inherit;
+      }
+      .filter-bar .label {
+        color: #666; font-size: 13px; margin-right:8px;
+      }
+
+      /* --- swipeable job card --- */
+      .left-panel {
+        position: relative;
+        height: calc(100vh - 60px - 36px);
+      }
+      .job-card-container {
+        position: sticky;
+        top: 24px;
+      }
+      .job-card {
+        width: 340px;
+        height: 640px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.85));
+        border-radius: 28px;
+        padding: 18px;
+        box-shadow: 0 12px 30px rgba(130,70,255,0.12), inset 0 1px 0 rgba(255,255,255,0.6);
+        transform-origin: left top;
+        user-select: none;
+        touch-action: pan-y;
+        transition: transform .28s cubic-bezier(.2,.9,.2,1), opacity .28s;
+        position: relative;
+        overflow: hidden;
+      }
+
+    
+      .job-card .title {
+        font-size: 28px; font-weight:700; letter-spacing:1px;
+        margin-bottom: 8px;
+      }
+      .chip-row {display:flex; gap:8px; margin-bottom: 12px; flex-wrap:wrap;}
+      .chip {
+        padding:6px 10px; background:#fff; border-radius:999px; box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        font-size:13px;
+      }
+      .field {
+        background: rgba(255,255,255,0.9); padding:10px; border-radius:12px; margin-bottom:10px;
+      }
+      .job-desc {
+        background: #fff; border-radius:14px; padding:12px; min-height:200px; box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+        font-size: 14px; line-height:1.35;
+      }
+      .show-more { text-align:center; padding:10px; color:#4b3bfa; cursor:pointer; font-weight:600; }
+
+      .benefits {
+        background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+        border-radius: 20px; padding: 18px; margin-top: 16px; min-height:100px;
+        box-shadow: 0 8px 20px rgba(130,70,255,0.06);
+      }
+
+      .swipe-hint {
+        position:absolute; top:12px; left:12px; width:36px; height:36px;
+        border-radius:20px; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.06);
+      }
+
+      .right-panel {
+        position: relative;
+        height: calc(100vh - 60px - 36px);
+      }
+      .job-list {
+        position: sticky;
+        top: 24px;
+        height: calc(100vh - 60px - 36px - 48px);
+        overflow:auto;
+        padding: 18px;
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+      }
+      .job-item {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:14px 18px;
+        background: linear-gradient(180deg,#fff,#fff);
+        border-radius:28px;
+        box-shadow: 0 8px 20px rgba(255,119,119,0.06), inset 0 -3px 0 rgba(181,146,255,0.03);
+        min-height:70px;
+        cursor:pointer;
+      }
+      .job-item .meta { font-size:13px; color:#4b4b4b }
+      .job-item .title { font-weight:700; font-size:16px; }
+      .job-item .badge { font-size:12px; color:#d14e6b; }
+      .job-item .arrow {
+        width:36px;height:36px;border-radius:999px;border:2px solid #222;display:flex;align-items:center;justify-content:center;
+        background: #fff;
+      }
+      .job-item:active { transform: translateY(2px); }
+
+      @media (max-width:1100px){
+        .page { grid-template-columns: 1fr; grid-auto-rows: auto; padding-bottom: 80px; }
+        #map{height:520px}
+        .left-panel, .right-panel { order: initial; }
+        .filter-bar { width: 92%; min-width: auto; left: 4%; transform:none; top:70px; }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="top-nav">
+      <div class="nav-left">SENDER</div>
+      <div class="nav-right">
+        <a href="main.html">Main</a>
+        <a href="applications2.html">Applications</a>
+        <a href="profile.html">Profile</a>
+      </div>
+    </nav>
+
+    <div class="page">
+      <div class="left-panel">
+        <div class="job-card-container">
+          <div class="job-card" id="jobCard" tabindex="0">
+            
+            <div class="title" id="cardTitle">Website Designer</div>
+            <div class="chip-row">
+              <div class="chip" id="cardLocation">Lubbock, TX</div>
+              <div class="chip" id="cardType">Part-time</div>
+              <div class="chip" id="cardPay">95k-100k/year</div>
+            </div>
+            <div class="field"><strong>Work setting:</strong> <span id="cardWork">Remote / Onsite</span></div>
+            <div class="field"><strong>Experience in Field?</strong> <span id="cardExp">2+ years</span></div>
+            <div class="job-desc" id="cardDesc">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Brief job description lines mimic screenshot style.
+              Use the Show more button to expand.
+            </div>
+            <div class="show-more" id="showMoreBtn">Show more</div>
+            <div class="benefits">
+              <strong>Benefits:</strong>
+              <div id="cardBenefits" style="margin-top:8px;">401k, Health, Flexible hours.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="position:relative">
+        <div id="map" title="Interactive map placeholder"></div>
+        <div class="map-watermark" title="placeholder image"></div>
+
+        <div class="filter-bar" id="filterBar">
+          <div class="label">Location</div>
+          <input id="filterLocation" type="text" value="Lubbock, TX" />
+          <div class="label">Range</div>
+          <select id="filterRange">
+            <option value="10">10mi</option>
+            <option value="20" selected>20mi</option>
+            <option value="50">50mi</option>
+          </select>
+          <div class="label">Pay</div>
+          <select id="filterPay">
+            <option value="40">40-70K</option>
+            <option value="80" selected>70-110K</option>
+            <option value="120">110K+</option>
+          </select>
+
+          <button id="applyBtn" style="margin-left:auto;padding:8px 12px;border-radius:12px;border:none;background:#4b3bfa;color:#fff;cursor:pointer;">Apply</button>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="job-list" id="jobList">
+          <div class="job-item" data-id="1">
+            <div>
+              <div class="title">Software Developer</div>
+              <div class="meta">Lubbock, TX · Posted 3 days ago · Part-time 82k/year</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="badge">AI Assistant Reviewed First</div>
+              <div class="arrow">→</div>
+            </div>
+          </div>
+          <div class="job-item" data-id="2">
+            <div>
+              <div class="title">Production Supervisor</div>
+              <div class="meta">Lubbock, TX · Posted 3 days ago · Part-time 82k/year</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="badge" style="color:#d14e6b">Human Reviewed First</div>
+              <div class="arrow">→</div>
+            </div>
+          </div>
+          <div class="job-item" data-id="3">
+            <div>
+              <div class="title">Data Analyst</div>
+              <div class="meta">Lubbock, TX · Posted 2 days ago · Full-time 75k-90k/year</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="badge">AI Assistant Reviewed First</div>
+              <div class="arrow">→</div>
+            </div>
+          </div>
+          <div class="job-item" data-id="4">
+            <div>
+              <div class="title">Marketing Manager</div>
+              <div class="meta">Lubbock, TX · Posted 1 day ago · Full-time 85k-100k/year</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="badge" style="color:#d14e6b">Human Reviewed First</div>
+              <div class="arrow">→</div>
+            </div>
+          </div>
+          <div class="job-item" data-id="5">
+            <div>
+              <div class="title">UX Designer</div>
+              <div class="meta">Lubbock, TX · Posted 4 days ago · Part-time 70k-85k/year</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="badge">AI Assistant Reviewed First</div>
+              <div class="arrow">→</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Job data array
+      const jobs = [
+        {
+          title: "Website Designer",
+          location: "Lubbock, TX",
+          type: "Part-time",
+          pay: "95k-100k/year",
+          workSetting: "Remote / Onsite",
+          experience: "2+ years",
+          description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Brief job description lines mimic screenshot style. Use the Show more button to expand.",
+          benefits: "401k, Health, Flexible hours."
+        },
+        {
+          title: "Software Developer",
+          location: "Lubbock, TX",
+          type: "Part-time",
+          pay: "82k/year",
+          workSetting: "Remote / Onsite",
+          experience: "3+ years",
+          description: "Develop and maintain software applications. Collaborate with cross-functional teams to deliver high-quality products. Experience with modern web technologies required.",
+          benefits: "Health insurance, 401k, Flexible hours, Remote work options."
+        },
+        {
+          title: "Production Supervisor",
+          location: "Lubbock, TX",
+          type: "Part-time",
+          pay: "82k/year",
+          workSetting: "Onsite",
+          experience: "5+ years",
+          description: "Oversee production operations and ensure efficiency. Manage team performance and implement process improvements. Strong leadership skills essential.",
+          benefits: "Competitive salary, Health benefits, Paid time off."
+        },
+        {
+          title: "Data Analyst",
+          location: "Lubbock, TX",
+          type: "Full-time",
+          pay: "75k-90k/year",
+          workSetting: "Remote",
+          experience: "2+ years",
+          description: "Analyze data to provide insights for business decisions. Proficiency in SQL, Python, and data visualization tools required.",
+          benefits: "Health insurance, 401k, Flexible hours."
+        },
+        {
+          title: "Marketing Manager",
+          location: "Lubbock, TX",
+          type: "Full-time",
+          pay: "85k-100k/year",
+          workSetting: "Onsite",
+          experience: "4+ years",
+          description: "Lead marketing campaigns and strategies. Experience in digital marketing and team management essential.",
+          benefits: "Competitive salary, Health benefits, Paid time off."
+        },
+        {
+          title: "UX Designer",
+          location: "Lubbock, TX",
+          type: "Part-time",
+          pay: "70k-85k/year",
+          workSetting: "Remote / Onsite",
+          experience: "3+ years",
+          description: "Design user interfaces and experiences. Proficiency in Figma, Adobe XD, and user research methods.",
+          benefits: "401k, Health, Flexible hours, Remote work options."
+        }
+      ];
+
+      let currentJobIndex = 0;
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
+      const jobCard = document.getElementById('jobCard');
+      const threshold = 100; 
+
+      function updateCard(jobIndex) {
+        const job = jobs[jobIndex];
+        document.getElementById('cardTitle').textContent = job.title;
+        document.getElementById('cardLocation').textContent = job.location;
+        document.getElementById('cardType').textContent = job.type;
+        document.getElementById('cardPay').textContent = job.pay;
+        document.getElementById('cardWork').textContent = job.workSetting;
+        document.getElementById('cardExp').textContent = job.experience;
+        document.getElementById('cardDesc').textContent = job.description;
+        document.getElementById('cardBenefits').textContent = job.benefits;
+      }
+
+  
+      jobCard.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+        jobCard.style.transition = 'none';
+      });
+
+      jobCard.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentX = e.touches[0].clientX;
+        const deltaX = currentX - startX;
+        jobCard.style.transform = `translateX(${deltaX}px) rotate(${deltaX * 0.1}deg)`;
+      });
+
+      jobCard.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        jobCard.style.transition = 'transform 0.3s ease';
+        const deltaX = currentX - startX;
+        if (Math.abs(deltaX) > threshold) {
+          if (deltaX > 0) {
+            // Swipe right: previous job
+            currentJobIndex = currentJobIndex > 0 ? currentJobIndex - 1 : jobs.length - 1;
+          } else {
+            // Swipe left: next job
+            currentJobIndex = currentJobIndex < jobs.length - 1 ? currentJobIndex + 1 : 0;
+          }
+          updateCard(currentJobIndex);
+        }
+        jobCard.style.transform = 'translateX(0) rotate(0deg)';
+      });
+
+  
+      jobCard.addEventListener('mousedown', (e) => {
+        startX = e.clientX;
+        isDragging = true;
+        jobCard.style.transition = 'none';
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        currentX = e.clientX;
+        const deltaX = currentX - startX;
+        jobCard.style.transform = `translateX(${deltaX}px) rotate(${deltaX * 0.1}deg)`;
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        jobCard.style.transition = 'transform 0.3s ease';
+        const deltaX = currentX - startX;
+        if (Math.abs(deltaX) > threshold) {
+          if (deltaX > 0) {
+            // Swipe right: previous job
+            currentJobIndex = currentJobIndex > 0 ? currentJobIndex - 1 : jobs.length - 1;
+          } else {
+            // Swipe left: next job
+            currentJobIndex = currentJobIndex < jobs.length - 1 ? currentJobIndex + 1 : 0;
+          }
+          updateCard(currentJobIndex);
+        }
+        jobCard.style.transform = 'translateX(0) rotate(0deg)';
+      });
+
+
+      updateCard(currentJobIndex);
+    </script>
+  </body>
+</html>
