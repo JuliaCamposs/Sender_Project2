@@ -6,3 +6,11 @@ Code and changes were usually made with the group together. That is why some mem
 
 Also, we had some issues with "pull requests" with one of our members. In order to solve that and use the updated code within another member repository, we had to download the folder and manually upload to the repository.
 
+
+Description of files:
+- IMG FOLDER: were all the images, logo, etc we used are stored.
+- INDEX HTML: Code for the Login in Page
+- MAIN HTML: Code for the interactive map page, job swipe, and listings.
+- PROFILE HTML: Code for the profile page which also leads to the submitted documents page.
+- COMPANY HTML: Page that shows the company's end of the website, able to edit listings and see list of people who applied.
+- STYLES HTML: Code for the general style and layout for the website. 
